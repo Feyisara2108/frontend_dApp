@@ -1,5 +1,6 @@
 import { useAppKitProvider } from '@reown/appkit/react';
-import { BrowserProvider, type Signer } from 'ethers'; // ← remove 'type' from BrowserProvider
+import { BrowserProvider } from 'ethers';        // ← runtime value, no 'type'
+import type { Signer } from 'ethers';             // ← type only, must use 'type'
 import { useEffect, useState } from 'react';
 import { getProvider } from '../constant/provider';
 
