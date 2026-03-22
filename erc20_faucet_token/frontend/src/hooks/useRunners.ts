@@ -1,5 +1,5 @@
 import { useAppKitProvider } from '@reown/appkit/react';
-import { BrowserProvider, Signer } from 'ethers';
+import { BrowserProvider, type Signer } from 'ethers'; // ← remove 'type' from BrowserProvider
 import { useEffect, useState } from 'react';
 import { getProvider } from '../constant/provider';
 
@@ -8,7 +8,6 @@ interface ProviderWithRequest {
 }
 
 export function useRunners() {
-    // Ethers v6 compatible wallet provider from AppKit adapter
     const { walletProvider } = useAppKitProvider<ProviderWithRequest>('eip155');
     const [provider, setProvider] = useState<BrowserProvider | null>(null);
     const [signer, setSigner] = useState<Signer | null>(null);
