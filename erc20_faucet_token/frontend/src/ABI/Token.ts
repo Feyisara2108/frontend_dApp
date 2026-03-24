@@ -1,26 +1,24 @@
 export const TOKEN_ABI = [
-
-    "function COOLDOWN_PERIOD() view returns (uint256)",
-    "function FAUCET_AMOUNT() view returns (uint256)",
-    "function MAX_SUPPLY() view returns (uint256)",
-
-
-    //ERC20 Standard
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
-    "function decimals() view returns (uint8)",
-    "function totalSupply() view returns (uint256)",
-    "function balanceOf(address account) view returns (uint256)",
-
-    // Faucet (View)
-    "function getClaimableTime(address user) view returns (uint256)",
-    "function lastClaimTime(address) view returns (uint256)",
-
-    // ERC20 Standard (Write) 
-    "function transfer(address to, uint256 value) returns (bool)",
-
-    // Core (Write) 
-    "function requestToken()",
-    "function mint(uint256 amount)",
-
+  "function COOLDOWN_PERIOD() view returns (uint256)",
+  "function FAUCET_AMOUNT() view returns (uint256)",
+  "function MAX_SUPPLY() view returns (uint256)",
+  "function owner() view returns (address)",
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function decimals() view returns (uint8)",
+  "function totalSupply() view returns (uint256)",
+  "function balanceOf(address account) view returns (uint256)",
+  "function allowance(address owner, address spender) view returns (uint256)",
+  "function getClaimableTime(address user) view returns (uint256)",
+  "function lastClaimTime(address account) view returns (uint256)",
+  "function transfer(address to, uint256 value) returns (bool)",
+  "function approve(address spender, uint256 value) returns (bool)",
+  "function transferFrom(address from, address to, uint256 value) returns (bool)",
+  "function requestToken()",
+  "function mint(address to, uint256 amount)",
+  "function transferOwnership(address newOwner)",
+  "event TokenRequested(address indexed user, uint256 amount)",
+  "event TokensMinted(address indexed to, uint256 amount)",
+  "event Transfer(address indexed from, address indexed to, uint256 value)",
+  "event OwnershipTransferred(address indexed previousOwner, address indexed newOwner)"
 ];
