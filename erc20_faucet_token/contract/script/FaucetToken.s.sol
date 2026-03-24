@@ -8,8 +8,9 @@ contract FaucetTokenScript is Script {
     function setUp() public {}
 
     function run() public {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address owner = vm.envAddress("OWNER");
-        vm.startBroadcast(owner);
+        vm.startBroadcast(deployerPrivateKey);
 
         new FaucetToken(owner);
 
