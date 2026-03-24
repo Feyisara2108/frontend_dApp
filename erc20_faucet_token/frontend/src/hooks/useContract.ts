@@ -1,15 +1,18 @@
 import { Contract } from 'ethers';
-import { useRunners } from './useRunners';
 import { TOKEN_ABI } from '../ABI/Token';
-
-const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS as string;
+import { APP_CONFIG, APP_CONFIG_ERROR } from '../config/app';
+import { useRunners } from './useRunners';
 
 export function useContract(withSigner = false) {
-    const { signer, readOnlyProvider } = useRunners();
+  const { signer, readOnlyProvider } = useRunners();
 
-    if (withSigner && signer) {
-        return new Contract(CONTRACT_ADDRESS, TOKEN_ABI, signer);
-    }
-    
-    return new Contract(CONTRACT_ADDRESS, TOKEN_ABI, readOnlyProvider);
+  if (APP_CONFIG_ERROR || !APP_CONFIG.contractAddress) {
+    return null;
+  }
+
+  if (withSigner) {
+    return signer ? new Contract(APP_CONFIG.contractAddress, TOKEN_ABI, signer) : null;
+  }
+
+  return new Contract(APP_CONFIG.contractAddress, TOKEN_ABI, readOnlyProvider);
 }

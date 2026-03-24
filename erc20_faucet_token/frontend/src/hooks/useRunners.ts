@@ -1,28 +1,50 @@
 import { useAppKitProvider } from '@reown/appkit/react';
-import { BrowserProvider } from 'ethers';        // ← runtime value, no 'type'
-import type { Signer } from 'ethers';             // ← type only, must use 'type'
+import { BrowserProvider } from 'ethers';
+import type { Signer } from 'ethers';
 import { useEffect, useState } from 'react';
 import { getProvider } from '../constant/provider';
 
 interface ProviderWithRequest {
-    request: (args: any) => Promise<any>;
+  request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>;
 }
 
 export function useRunners() {
-    const { walletProvider } = useAppKitProvider<ProviderWithRequest>('eip155');
-    const [provider, setProvider] = useState<BrowserProvider | null>(null);
-    const [signer, setSigner] = useState<Signer | null>(null);
+  const { walletProvider } = useAppKitProvider<ProviderWithRequest>('eip155');
+  const [provider, setProvider] = useState<BrowserProvider | null>(null);
+  const [signer, setSigner] = useState<Signer | null>(null);
 
-    useEffect(() => {
-        if (walletProvider) {
-            const browserProvider = new BrowserProvider(walletProvider as any);
-            setProvider(browserProvider);
-            browserProvider.getSigner().then(setSigner).catch(console.error);
-        } else {
-            setProvider(null);
-            setSigner(null);
+  useEffect(() => {
+    let isMounted = true;
+
+    if (!walletProvider) {
+      setProvider(null);
+      setSigner(null);
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    const browserProvider = new BrowserProvider(walletProvider);
+    setProvider(browserProvider);
+
+    browserProvider
+      .getSigner()
+      .then((nextSigner) => {
+        if (isMounted) {
+          setSigner(nextSigner);
         }
-    }, [walletProvider]);
+      })
+      .catch((error) => {
+        console.error('Failed to load wallet signer:', error);
+        if (isMounted) {
+          setSigner(null);
+        }
+      });
 
-    return { provider, signer, readOnlyProvider: getProvider() };
+    return () => {
+      isMounted = false;
+    };
+  }, [walletProvider]);
+
+  return { provider, signer, readOnlyProvider: getProvider() };
 }
